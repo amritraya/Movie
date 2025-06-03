@@ -27,7 +27,7 @@ const options = {
 };
 
 const App = () => {
-  console.log(API_KEY);
+
 
  const [search, setSearch] = useState('');
  const [errorMsg, setErrorMsg] = useState('');
@@ -56,7 +56,7 @@ useDebounce ( () => setDebounceSearch(search), 500, [search]);
           setmovieList([]);
             return;
          }
-         console.log(data);
+    
          
 
          setmovieList(data.results || []);
