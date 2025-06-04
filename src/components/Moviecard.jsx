@@ -1,33 +1,78 @@
-import React from 'react'
+import { useState, useCallback } from 'react';
+import './Moviecard.css';
+import Showtrailer from './Showtrailer';
 
-const  Moviecard = ({movie:
-    {title, vote_average, poster_path, release_date, original_language}
-} ) => {
- 
+
+const Moviecard = ({ movie }) => {
+  const [showTrailer, setShowTrailer] = useState(false);
+
+  // const fetchTrailer = useCallback (async () => {
+  //   setLoadingTrailer(true); // Updated to use setLoadingTrailer
+  //   try {
+  //     const response = await fetch(
+  //       `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           accept: 'application/json',
+  //           authorization: `Bearer ${API_KEY}`
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     const trailer = data.results.find(
+  //       (video) => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser')
+  //     );
+  //     setTrailerKey(trailer?.key);
+  //   } catch (error) {
+  //     console.error('Error fetching trailer:', error);
+  //   } finally {
+  //     setLoadingTrailer(false); // Updated to use setLoadingTrailer
+  //   }
+  // }, [movie.id]
+  // );
+
+
+
   return (
     <>
-    <div className='movie-card'> 
+      <div className="movie-card">
+      <div className="poster-container" onClick={()=>
+      setShowTrailer(true)}>
+        <img
+          src={
+            movie.poster_path
+              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+              : '/placeholder-poster.jpg'
+          }
+          alt={movie.title}
+          className="movie-poster"
+          loading="lazy"
+        />
+        <div className="play-overlay">
+          <svg className="play-icon" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+      <div className="movie-info">
+        <h3>{movie.title}</h3>
+        <p>{movie.release_date?.split('-')[0]}</p>
+        <div className="rating">{movie.vote_average?.toFixed(1)}</div>
+      </div>
+      </div>
 
-        <img src={poster_path ?`http://image.tmdb.org/t/p/w500${poster_path}`: '/no-movie.png' } alt={title} />
-        
-       <div className='mt-4'>
-          <h3>{title}</h3> 
-          <div className='content'>
-            <div className="rating">
-              <img src="star.svg" alt="star icon" />
-              <p>{vote_average ? vote_average.toFixed(1) : 'N/A'}</p>
-            </div>
-            <span>•</span>
-            <p className="lang">{original_language}</p>
-            <span>•</span>
-          <p className='year'>{release_date ? release_date.split("-")[0] : 'N/A'}</p>
-          </div>
-        </div> 
+      {showTrailer && (
+        <Showtrailer
+          movieId={movie.id}
+          onClose={()=> {setShowTrailer(false)}}
+        />
+      )}
 
-    </div>
-    </>
-    
-  )
-}
+</>
+  
+);
+} //Components closing
 
-export default Moviecard
+
+export default Moviecard;

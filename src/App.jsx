@@ -5,6 +5,8 @@ import { Search } from './components/Search';
 import Spinner from './components/Spinner';
 import Moviecard from './components/Moviecard';
 
+import Pagination from './components/Pagination'
+
 
 // function App() {
 
@@ -18,6 +20,7 @@ import Moviecard from './components/Moviecard';
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 const options = {
     method:'GET',
     headers:{
@@ -33,15 +36,24 @@ const App = () => {
  const [errorMsg, setErrorMsg] = useState('');
  const [movieList, setmovieList] = useState([]);
  const [isLoading, setIsLoading] = useState(false);
+ const [currentPage, setCurrentPage] = useState(1);
+ const [totalPages, setTotalPages] = useState(1);
 const [debounceSearch, setDebounceSearch] = useState('');
 
-useDebounce ( () => setDebounceSearch(search), 500, [search]);
+useDebounce ( () => {
 
- const fetchMovies = async (query) => {
+  setDebounceSearch(search);
+  setCurrentPage(1); //reset to page 1 when search changes
+}
+, 1000, [search]);
+
+
+
+ const fetchMovies = async (query, page = 1) => {
     setIsLoading(true);
     setErrorMsg('');
     try{
-        const endpoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`  : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+        const endpoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&page=${page}`  : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc&page=${page}`;
 
        const response = await fetch(endpoint, options);
         
@@ -49,18 +61,19 @@ useDebounce ( () => setDebounceSearch(search), 500, [search]);
               throw new Error('failed to fetch movies');  
         }
 
-         const data = await response.json();
+        
+        const data = await response.json();
+        
        
          if(data.Response === 'false'){
           setErrorMsg(data.Error || 'failed to fetch movies');
           setmovieList([]);
             return;
          }
-    
-         
-
+  
          setmovieList(data.results || []);
-        
+        // make sure to set totalPages from API reference
+        setTotalPages(data.total_pages ? Math.min(data.total_pages, 500): 1);        
     }
     catch(error){
       console.error(`Error fetching movie: ${error}`);
@@ -73,8 +86,10 @@ useDebounce ( () => setDebounceSearch(search), 500, [search]);
 
 
  useEffect(() => {
-      fetchMovies(debounceSearch);
- }, [debounceSearch]);
+      fetchMovies(debounceSearch, currentPage);
+ }, [debounceSearch, currentPage]);
+
+
 
 
   return(
@@ -102,13 +117,33 @@ useDebounce ( () => setDebounceSearch(search), 500, [search]);
         <p className='text-red-500'>{errorMsg}</p>
        ): (
         <ul>
+        
           {movieList.map((movie) => (
-            <Moviecard key={movie.id} movie={movie} />
+            <Moviecard key={`${movie.id}-${currentPage}`} movie={movie} />
           ))}
         </ul>
        )
       }
        
+      </section>
+
+      <section>
+       {totalPages > 1 &&(
+
+         <Pagination
+         currentPage={currentPage}
+         totalPages={totalPages}
+         onPageChange={(newPage)=>{
+           console.log('changing to page', newPage);
+           setCurrentPage(newPage);
+         }}
+         />
+       )
+
+       }
+        
+
+      
       </section>
             
 
