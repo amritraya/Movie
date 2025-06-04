@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import '../assets/ShowTrailer.css'
+import '../assets/Showtrailer.css'
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const url= "https://api.themoviedb.org/3";
