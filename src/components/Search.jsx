@@ -11,6 +11,7 @@ export const Search = ({search, setSearch}) => {
             <img src="./search.svg" alt="search" />
            
         </div>
+        
     </div>
     </>
   )

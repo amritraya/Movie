@@ -1,0 +1,110 @@
+.movie-details-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(0,0,0,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    border: 2px solid red;
+    overflow-y: auto;
+}
+
+.modal-content{
+    border: 3px green solid;
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    background: #281b1b;
+    border-radius: 8px;
+    overflow: hidden;
+    animation:fadeIn 0.3s ease;
+    color: white;
+    max-height: 90vh;
+    overflow-y: auto ;
+}
+
+.details-content{
+    padding: 20px;
+}
+.details-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.details-header h2{
+    margin: 0;
+    font-size: 1.8rem;
+    
+}
+
+.rating{
+border: 1px solid pink;
+background: #e50914;
+padding: 5px 10px;
+border-radius: 4px;
+font-weight: bold;
+}
+.details-body{
+    display: flex;
+    gap: 20px;
+}
+
+.poster{
+    /* flex-grow: 0;
+    flex-shrink: 0;
+    flex:300px; */
+    flex: 0 0 300px; /*shorthand*/
+}
+
+.poster img{
+    width: 100%;
+    border-radius: 8px;   
+}
+.info{
+    flex:1;
+}
+
+.overview{
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+.meta{
+    margin: 20px 0;
+    display: grid;
+    /* grid-template-columns: repeat(2, 1fr);
+    gap: 10px; */
+}
+.meta p{
+    margin: 5px 0;
+}
+.production-companies {
+  margin-top: 20px;
+}
+
+.companies-grid {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  border: 1px solid pink;
+}
+
+.company {
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 4px;
+  min-width: 120px;
+}
+
+.country {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 5px;
+
+}

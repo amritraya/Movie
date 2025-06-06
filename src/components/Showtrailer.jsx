@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import {fetchTrailer} from '../services/apiService.js';
+// import '../assets/Showtrailer.css'
 
-import '../assets/Showtrailer.css'
+// const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+// const url= "https://api.themoviedb.org/3";
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const url= "https://api.themoviedb.org/3";
-
-const options = {
-    method:'GET',
-    headers:{
-      accept: 'application/json',
-      authorization: `Bearer ${API_KEY}`
-    }
-};
+// const options = {
+//     method:'GET',
+//     headers:{
+//       accept: 'application/json',
+//       authorization: `Bearer ${API_KEY}`
+//     }
+// };
 
 
 function Showtrailer({movieId, onClose}) {
@@ -20,31 +20,47 @@ function Showtrailer({movieId, onClose}) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-const fetchTrailer = async() =>{
-  try{
+// const fetchTrailer = async() =>{
+//   try{
 
-    const response = await fetch(`${url}/movie/${movieId}/videos?`, options);
+//     const response = await fetch(`${url}/movie/${movieId}/videos?`, options);
     
-    const data = await response.json();
+//     const data = await response.json();
     
-    const trailer = data.results.find(
-      (video) => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser')
-    );
+//     const trailer = data.results.find(
+//       (video) => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser')
+//     );
     
-    setTrailerKey(trailer?.key);
-    setError(!trailer?.key ? 'No trailer available' : null);
-  }catch(error){
+//     setTrailerKey(trailer?.key);
+//     setError(!trailer?.key ? 'No trailer available' : null);
+//   }catch(error){
+//     console.error('error fetching trailer', error);
+//     setError('Failed to load trailer');
+//   }finally{
+//     setIsLoading(false);
+//   }
+
+// }// fetchTrailer closing
+
+const loadTrailer = async () => {
+
+  setIsLoading(true);
+  setError(null);
+  try {
+    const trailer = await fetchTrailer(movieId);
+
+    setTrailerKey(trailer.key);
+    setError(!trailer?.key ? 'No Trailer available' : null);
+    
+  } catch (error) {
     console.error('error fetching trailer', error);
-    setError('Failed to load trailer');
   }finally{
     setIsLoading(false);
   }
 
-}// fetchTrailer closing
-
-
-useEffect( ()=> {
-  fetchTrailer();
+}// function closing
+useEffect( () => {
+  loadTrailer();
 
 }, [movieId] );
 
