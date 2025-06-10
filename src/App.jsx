@@ -9,7 +9,7 @@ import Pagination from "./components/Pagination";
 import { fetchMovies } from "./services/apiService.js";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MovieDetail from "./Pages/MovieDetail.jsx";
-import Index from "./Pages/index.jsx";
+import Index from "./Pages/Index.jsx";
 
 const App = () => {
   return (
